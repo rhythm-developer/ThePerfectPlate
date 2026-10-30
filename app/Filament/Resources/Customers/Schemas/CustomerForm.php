@@ -37,8 +37,10 @@ class CustomerForm
                     ])
                     ->createOptionUsing(fn (array $data) => User::create($data)->getKey()),
                 TextInput::make('customer_code')
-                    ->required()
-                    ->unique(ignoreRecord: true),
+                    ->placeholder('Auto-generated')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->visibleOn('edit'),
                 TextInput::make('company_name')
                     ->default(null),
                 Textarea::make('notes')

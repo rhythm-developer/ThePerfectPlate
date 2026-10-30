@@ -7,13 +7,15 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\RoleName;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'address'])]
+#[Fillable(['role_id', 'name', 'email', 'password', 'phone', 'address'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -21,12 +23,21 @@ class User extends Authenticatable implements FilamentUser
     use HasFactory, Notifiable;
 
     /**
-     * Any authenticated user may access the admin panel for now.
-     * Tighten this once roles/permissions are introduced.
+     * Only staff (admins and employees) may use the admin panel.
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->hasRole(RoleName::Admin, RoleName::Employee);
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole(RoleName ...$roles): bool
+    {
+        return in_array($this->role?->name, $roles, true);
     }
 
     /**

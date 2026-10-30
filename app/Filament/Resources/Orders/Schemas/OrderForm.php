@@ -7,7 +7,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class OrderForm
 {
@@ -16,9 +15,10 @@ class OrderForm
         return $schema
             ->components([
                 TextInput::make('order_number')
-                    ->required()
-                    ->default(fn () => 'ORD-'.now()->format('Y').'-'.mb_strtoupper(Str::random(6)))
-                    ->unique(ignoreRecord: true),
+                    ->placeholder('Auto-generated')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->visibleOn('edit'),
                 Select::make('customer_id')
                     ->relationship('customer', 'customer_code')
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->customer_code} — {$record->user?->name}")

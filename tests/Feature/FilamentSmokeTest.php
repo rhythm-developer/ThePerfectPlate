@@ -1,10 +1,12 @@
 <?php
 
 use App\Enums\OrderStatus;
+use App\Enums\RoleName;
 use App\Models\Customer;
 use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,7 +14,7 @@ uses(RefreshDatabase::class);
 
 function makeAdmin(): User
 {
-    return User::factory()->create();
+    return User::factory()->create(['role_id' => Role::idFor(RoleName::Admin)]);
 }
 
 it('loads every catering resource index and create page', function () {

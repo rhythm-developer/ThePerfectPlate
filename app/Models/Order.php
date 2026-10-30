@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Support\CodeGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,13 @@ class Order extends Model
         'total',
         'notes',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Order $order) {
+            $order->order_number ??= CodeGenerator::next(static::class, 'order_number', 'ORD-'.now()->format('Y').'-');
+        });
+    }
 
     protected function casts(): array
     {

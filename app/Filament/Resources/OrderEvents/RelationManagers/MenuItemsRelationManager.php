@@ -5,7 +5,6 @@ namespace App\Filament\Resources\OrderEvents\RelationManagers;
 use App\Models\MenuItem;
 use Filament\Actions\AttachAction;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DetachAction;
 use Filament\Actions\DetachBulkAction;
 use Filament\Actions\EditAction;
@@ -100,7 +99,6 @@ class MenuItemsRelationManager extends RelationManager
                 BulkActionGroup::make([
                     DetachBulkAction::make()
                         ->after(fn ($livewire) => $livewire->getOwnerRecord()->recalculateSubtotal()),
-                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

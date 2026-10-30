@@ -37,8 +37,10 @@ class EmployeeForm
                     ])
                     ->createOptionUsing(fn (array $data) => User::create($data)->getKey()),
                 TextInput::make('employee_code')
-                    ->required()
-                    ->unique(ignoreRecord: true),
+                    ->placeholder('Auto-generated')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->visibleOn('edit'),
                 TextInput::make('designation')
                     ->required(),
                 DatePicker::make('hire_date'),
