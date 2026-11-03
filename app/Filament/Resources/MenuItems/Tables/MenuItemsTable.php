@@ -3,9 +3,12 @@
 namespace App\Filament\Resources\MenuItems\Tables;
 
 use App\Models\MenuCategory;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -50,7 +53,11 @@ class MenuItemsTable
                 TernaryFilter::make('is_vegetarian'),
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

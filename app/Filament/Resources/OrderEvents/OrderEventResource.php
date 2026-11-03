@@ -5,9 +5,11 @@ namespace App\Filament\Resources\OrderEvents;
 use App\Filament\Resources\OrderEvents\Pages\CreateOrderEvent;
 use App\Filament\Resources\OrderEvents\Pages\EditOrderEvent;
 use App\Filament\Resources\OrderEvents\Pages\ListOrderEvents;
+use App\Filament\Resources\OrderEvents\Pages\ViewOrderEvent;
 use App\Filament\Resources\OrderEvents\RelationManagers\EmployeesRelationManager;
 use App\Filament\Resources\OrderEvents\RelationManagers\MenuItemsRelationManager;
 use App\Filament\Resources\OrderEvents\Schemas\OrderEventForm;
+use App\Filament\Resources\OrderEvents\Schemas\OrderEventInfolist;
 use App\Filament\Resources\OrderEvents\Tables\OrderEventsTable;
 use App\Models\OrderEvent;
 use BackedEnum;
@@ -35,6 +37,11 @@ class OrderEventResource extends Resource
         return OrderEventForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return OrderEventInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return OrderEventsTable::configure($table);
@@ -53,6 +60,7 @@ class OrderEventResource extends Resource
         return [
             'index' => ListOrderEvents::route('/'),
             'create' => CreateOrderEvent::route('/create'),
+            'view' => ViewOrderEvent::route('/{record}'),
             'edit' => EditOrderEvent::route('/{record}/edit'),
         ];
     }

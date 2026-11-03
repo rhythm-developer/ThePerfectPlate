@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
-use App\Enums\RoleName;
-use App\Models\User;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -24,16 +24,10 @@ class UsersTable
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make('phone'),
-                TextColumn::make('role.label')
+                TextColumn::make('role.name')
                     ->label('Role')
                     ->badge()
-                    ->placeholder('No role')
-                    ->color(fn (User $record) => match ($record->role?->name) {
-                        RoleName::Admin => 'danger',
-                        RoleName::Employee => 'info',
-                        RoleName::Customer => 'success',
-                        default => 'gray',
-                    }),
+                    ->placeholder('No role'),
                 TextColumn::make('customer.customer_code')
                     ->label('Customer code')
                     ->placeholder('—'),
@@ -53,8 +47,11 @@ class UsersTable
                     ->query(fn (Builder $query) => $query->whereNull('role_id')),
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
             ]);
     }
 }

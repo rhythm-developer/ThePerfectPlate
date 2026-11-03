@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\MenuCategories;
 
+use App\Enums\NavigationGroup;
 use App\Filament\Resources\MenuCategories\Pages\CreateMenuCategory;
 use App\Filament\Resources\MenuCategories\Pages\EditMenuCategory;
 use App\Filament\Resources\MenuCategories\Pages\ListMenuCategories;
+use App\Filament\Resources\MenuCategories\Pages\ViewMenuCategory;
 use App\Filament\Resources\MenuCategories\Schemas\MenuCategoryForm;
+use App\Filament\Resources\MenuCategories\Schemas\MenuCategoryInfolist;
 use App\Filament\Resources\MenuCategories\Tables\MenuCategoriesTable;
 use App\Models\MenuCategory;
-use App\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,11 @@ class MenuCategoryResource extends Resource
         return MenuCategoryForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return MenuCategoryInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return MenuCategoriesTable::configure($table);
@@ -48,6 +55,7 @@ class MenuCategoryResource extends Resource
         return [
             'index' => ListMenuCategories::route('/'),
             'create' => CreateMenuCategory::route('/create'),
+            'view' => ViewMenuCategory::route('/{record}'),
             'edit' => EditMenuCategory::route('/{record}/edit'),
         ];
     }

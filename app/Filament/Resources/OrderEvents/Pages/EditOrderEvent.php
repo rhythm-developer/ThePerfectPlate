@@ -4,6 +4,7 @@ namespace App\Filament\Resources\OrderEvents\Pages;
 
 use App\Filament\Resources\OrderEvents\OrderEventResource;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditOrderEvent extends EditRecord
@@ -13,6 +14,7 @@ class EditOrderEvent extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            ViewAction::make(),
             DeleteAction::make(),
         ];
     }

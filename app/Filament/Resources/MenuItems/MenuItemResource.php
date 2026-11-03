@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\MenuItems;
 
+use App\Enums\NavigationGroup;
 use App\Filament\Resources\MenuItems\Pages\CreateMenuItem;
 use App\Filament\Resources\MenuItems\Pages\EditMenuItem;
 use App\Filament\Resources\MenuItems\Pages\ListMenuItems;
+use App\Filament\Resources\MenuItems\Pages\ViewMenuItem;
 use App\Filament\Resources\MenuItems\Schemas\MenuItemForm;
+use App\Filament\Resources\MenuItems\Schemas\MenuItemInfolist;
 use App\Filament\Resources\MenuItems\Tables\MenuItemsTable;
 use App\Models\MenuItem;
-use App\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,11 @@ class MenuItemResource extends Resource
         return MenuItemForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return MenuItemInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return MenuItemsTable::configure($table);
@@ -48,6 +55,7 @@ class MenuItemResource extends Resource
         return [
             'index' => ListMenuItems::route('/'),
             'create' => CreateMenuItem::route('/create'),
+            'view' => ViewMenuItem::route('/{record}'),
             'edit' => EditMenuItem::route('/{record}/edit'),
         ];
     }

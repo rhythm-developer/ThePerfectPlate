@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\Payments;
 
+use App\Enums\NavigationGroup;
 use App\Filament\Resources\Payments\Pages\CreatePayment;
 use App\Filament\Resources\Payments\Pages\EditPayment;
 use App\Filament\Resources\Payments\Pages\ListPayments;
+use App\Filament\Resources\Payments\Pages\ViewPayment;
 use App\Filament\Resources\Payments\Schemas\PaymentForm;
+use App\Filament\Resources\Payments\Schemas\PaymentInfolist;
 use App\Filament\Resources\Payments\Tables\PaymentsTable;
 use App\Models\Payment;
-use App\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,11 @@ class PaymentResource extends Resource
         return PaymentForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return PaymentInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return PaymentsTable::configure($table);
@@ -48,6 +55,7 @@ class PaymentResource extends Resource
         return [
             'index' => ListPayments::route('/'),
             'create' => CreatePayment::route('/create'),
+            'view' => ViewPayment::route('/{record}'),
             'edit' => EditPayment::route('/{record}/edit'),
         ];
     }
