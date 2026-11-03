@@ -34,6 +34,8 @@ it('loads every catering resource index and create page', function () {
         '/admin/orders/create',
         '/admin/payments',
         '/admin/payments/create',
+        '/admin/users',
+        '/admin/users/create',
     ] as $url) {
         $response = $this->get($url);
         expect($response->status())->toBe(200, "Failed loading {$url}: got {$response->status()}");
@@ -56,5 +58,8 @@ it('loads order edit page with events relation manager and order-event edit with
     expect($response->status())->toBe(200);
 
     $response = $this->get("/admin/order-events/{$event->id}/edit");
+    expect($response->status())->toBe(200);
+
+    $response = $this->get("/admin/users/{$custUser->id}/edit");
     expect($response->status())->toBe(200);
 });
