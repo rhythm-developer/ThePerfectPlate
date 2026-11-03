@@ -69,4 +69,16 @@ class Order extends Model
         $this->total = $subtotal - $this->discount + $this->tax;
         $this->saveQuietly();
     }
+
+    /**
+     * Recalculate every event's subtotal from its lines, then the order's
+     * totals. Also covers events removed since the last calculation.
+     */
+    public function recalculateAllTotals(): void
+    {
+        // Query fresh: the loaded relation may still hold events just removed.
+        $this->events()->get()->each->recalculateSubtotal();
+
+        $this->recalculateTotals();
+    }
 }

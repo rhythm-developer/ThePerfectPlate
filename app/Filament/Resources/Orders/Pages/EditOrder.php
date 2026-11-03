@@ -22,4 +22,12 @@ class EditOrder extends EditRecord
             RestoreAction::make(),
         ];
     }
+
+    /**
+     * Runs after the events, menu items and staff repeaters have been saved.
+     */
+    protected function afterSave(): void
+    {
+        $this->record->recalculateAllTotals();
+    }
 }

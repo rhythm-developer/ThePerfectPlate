@@ -49,6 +49,65 @@ class OrderInfolist
                                                 ->weight('bold'),
                                         ]),
                                 ]),
+                            Tab::make('Events')
+                                ->icon('heroicon-o-calendar-days')
+                                ->schema([
+                                    RepeatableEntry::make('events')
+                                        ->hiddenLabel()
+                                        ->placeholder('No events.')
+                                        ->columns(4)
+                                        ->schema([
+                                            TextEntry::make('name'),
+                                            TextEntry::make('event_date')
+                                                ->date(),
+                                            TextEntry::make('guest_count')
+                                                ->label('Guests')
+                                                ->numeric(),
+                                            TextEntry::make('status')
+                                                ->badge(),
+                                            TextEntry::make('venue')
+                                                ->placeholder('—'),
+                                            TextEntry::make('start_time')
+                                                ->time()
+                                                ->placeholder('—'),
+                                            TextEntry::make('end_time')
+                                                ->time()
+                                                ->placeholder('—'),
+                                            TextEntry::make('subtotal')
+                                                ->numeric(decimalPlaces: 2)
+                                                ->weight('bold'),
+                                            RepeatableEntry::make('menuItemLines')
+                                                ->label('Menu items')
+                                                ->placeholder('No menu items.')
+                                                ->columnSpanFull()
+                                                ->columns(4)
+                                                ->schema([
+                                                    TextEntry::make('menuItem.name')
+                                                        ->label('Item'),
+                                                    TextEntry::make('quantity')
+                                                        ->label('Qty')
+                                                        ->numeric(),
+                                                    TextEntry::make('unit_price')
+                                                        ->numeric(decimalPlaces: 2),
+                                                    TextEntry::make('line_total')
+                                                        ->numeric(decimalPlaces: 2),
+                                                ]),
+                                            RepeatableEntry::make('staffAssignments')
+                                                ->label('Staff')
+                                                ->placeholder('No staff assigned.')
+                                                ->columnSpanFull()
+                                                ->columns(3)
+                                                ->schema([
+                                                    TextEntry::make('employee.employee_code')
+                                                        ->label('Code'),
+                                                    TextEntry::make('employee.user.name')
+                                                        ->label('Name'),
+                                                    TextEntry::make('role')
+                                                        ->label('Role on event')
+                                                        ->placeholder('—'),
+                                                ]),
+                                        ]),
+                                ]),
                             Tab::make('Payments')
                                 ->icon('heroicon-o-banknotes')
                                 ->schema([

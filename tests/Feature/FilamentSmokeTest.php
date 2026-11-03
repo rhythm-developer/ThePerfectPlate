@@ -46,23 +46,27 @@ it('loads every catering resource index and create page', function () {
     }
 });
 
-it('loads order edit page with events relation manager and order-event edit with sub relation managers', function () {
+it('loads the order edit page with nested events, menu items and staff, and the user edit page', function () {
     $this->actingAs(makeAdmin());
 
     $custUser = User::factory()->create();
     $customer = Customer::create(['user_id' => $custUser->id, 'customer_code' => 'CUS-1', 'is_active' => true]);
+    $employee = Employee::create(['user_id' => User::factory()->create()->id, 'employee_code' => 'EMP-1', 'designation' => 'Chef', 'is_active' => true]);
 
     $cat = MenuCategory::create(['name' => 'Starters', 'slug' => 'starters', 'sort_order' => 0, 'is_active' => true]);
-    MenuItem::create(['menu_category_id' => $cat->id, 'name' => 'Spring Rolls', 'price' => 150, 'is_vegetarian' => true, 'is_available' => true]);
+    $item = MenuItem::create(['menu_category_id' => $cat->id, 'name' => 'Spring Rolls', 'price' => 150, 'is_vegetarian' => true, 'is_available' => true]);
 
     $order = Order::create(['order_number' => 'ORD-1', 'customer_id' => $customer->id, 'status' => OrderStatus::Pending, 'discount' => 0, 'tax' => 0]);
     $event = $order->events()->create(['name' => 'Reception', 'event_date' => now()->addDays(10), 'guest_count' => 50, 'status' => 'pending']);
+    $event->menuItemLines()->create(['menu_item_id' => $item->id, 'quantity' => 2, 'unit_price' => 150]);
+    $event->staffAssignments()->create(['employee_id' => $employee->id, 'role' => 'Head chef']);
 
     $response = $this->get("/admin/orders/{$order->id}/edit");
     expect($response->status())->toBe(200);
 
-    $response = $this->get("/admin/order-events/{$event->id}/edit");
+    $response = $this->get("/admin/orders/{$order->id}");
     expect($response->status())->toBe(200);
+    $response->assertSee('Spring Rolls')->assertSee('Head chef');
 
     $response = $this->get("/admin/users/{$custUser->id}/edit");
     expect($response->status())->toBe(200);
@@ -85,7 +89,6 @@ it('loads the view page and populated list page of every resource', function () 
         'customers' => $customer,
         'employees' => $employee,
         'orders' => $order,
-        'order-events' => $event,
         'payments' => $payment,
         'users' => $customer->user,
     ] as $slug => $record) {

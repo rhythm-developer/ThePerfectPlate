@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderEvent extends Model
 {
@@ -52,8 +53,26 @@ class OrderEvent extends Model
     public function employees(): BelongsToMany
     {
         return $this->belongsToMany(Employee::class, 'order_event_employee')
+            ->using(OrderEventEmployee::class)
             ->withPivot('role')
             ->withTimestamps();
+    }
+
+    /**
+     * Menu item lines as rows, so the order form's repeater can create,
+     * update and delete them.
+     */
+    public function menuItemLines(): HasMany
+    {
+        return $this->hasMany(OrderEventMenuItem::class);
+    }
+
+    /**
+     * Staff assignments as rows, for the order form's repeater.
+     */
+    public function staffAssignments(): HasMany
+    {
+        return $this->hasMany(OrderEventEmployee::class);
     }
 
     /**
