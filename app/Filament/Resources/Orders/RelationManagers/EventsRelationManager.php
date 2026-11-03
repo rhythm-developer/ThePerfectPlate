@@ -16,6 +16,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TimePicker;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -28,24 +30,38 @@ class EventsRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->required(),
-                DatePicker::make('event_date')
-                    ->required(),
-                TimePicker::make('start_time'),
-                TimePicker::make('end_time'),
-                TextInput::make('venue'),
-                Textarea::make('venue_address')
-                    ->columnSpanFull(),
-                TextInput::make('guest_count')
-                    ->numeric()
-                    ->required(),
-                Select::make('status')
-                    ->options(OrderEventStatus::class)
-                    ->default(OrderEventStatus::Pending)
-                    ->required(),
-                Textarea::make('notes')
-                    ->columnSpanFull(),
+                Tabs::make('Event')
+                    ->columnSpanFull()
+                    ->tabs([
+                        Tab::make('Details')
+                            ->columns(2)
+                            ->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                                DatePicker::make('event_date')
+                                    ->required(),
+                                TimePicker::make('start_time'),
+                                TimePicker::make('end_time'),
+                                TextInput::make('guest_count')
+                                    ->numeric()
+                                    ->required(),
+                                Select::make('status')
+                                    ->options(OrderEventStatus::class)
+                                    ->default(OrderEventStatus::Pending)
+                                    ->required(),
+                            ]),
+                        Tab::make('Venue')
+                            ->schema([
+                                TextInput::make('venue'),
+                                Textarea::make('venue_address')
+                                    ->columnSpanFull(),
+                            ]),
+                        Tab::make('Notes')
+                            ->schema([
+                                Textarea::make('notes')
+                                    ->columnSpanFull(),
+                            ]),
+                    ]),
             ]);
     }
 

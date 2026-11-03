@@ -8,6 +8,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class PaymentForm
@@ -16,36 +17,46 @@ class PaymentForm
     {
         return $schema
             ->components([
-                Select::make('order_id')
-                    ->relationship('order', 'order_number')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                TextInput::make('amount')
-                    ->required()
-                    ->numeric()
-                    ->minValue(0),
-                Select::make('method')
-                    ->options(PaymentMethod::class)
-                    ->required(),
-                Select::make('type')
-                    ->options(PaymentType::class)
-                    ->default(PaymentType::Payment)
-                    ->required(),
-                TextInput::make('reference')
-                    ->default(null),
-                DateTimePicker::make('paid_at')
-                    ->default(now())
-                    ->required(),
-                Select::make('received_by')
-                    ->label('Received by')
-                    ->relationship('receivedBy', 'employee_code')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->employee_code} — {$record->user?->name}")
-                    ->searchable()
-                    ->preload(),
-                Textarea::make('notes')
-                    ->default(null)
-                    ->columnSpanFull(),
+                Section::make('Payment')
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        Select::make('order_id')
+                            ->relationship('order', 'order_number')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                        TextInput::make('amount')
+                            ->required()
+                            ->numeric()
+                            ->minValue(0),
+                        Select::make('method')
+                            ->options(PaymentMethod::class)
+                            ->required(),
+                        Select::make('type')
+                            ->options(PaymentType::class)
+                            ->default(PaymentType::Payment)
+                            ->required(),
+                    ]),
+                Section::make('Details')
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->schema([
+                        TextInput::make('reference')
+                            ->default(null),
+                        DateTimePicker::make('paid_at')
+                            ->default(now())
+                            ->required(),
+                        Select::make('received_by')
+                            ->label('Received by')
+                            ->relationship('receivedBy', 'employee_code')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->employee_code} — {$record->user?->name}")
+                            ->searchable()
+                            ->preload(),
+                        Textarea::make('notes')
+                            ->default(null)
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 }
