@@ -8,17 +8,23 @@ use App\Filament\Resources\Payments\Pages\ListPayments;
 use App\Filament\Resources\Payments\Schemas\PaymentForm;
 use App\Filament\Resources\Payments\Tables\PaymentsTable;
 use App\Models\Payment;
+use App\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PaymentResource extends Resource
 {
     protected static ?string $model = Payment::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+
+    protected static string|UnitEnum|null $navigationGroup = NavigationGroup::Orders;
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
